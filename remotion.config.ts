@@ -1,14 +1,7 @@
-import { Config } from 'remotion';
+import { Config } from '@remotion/cli/config';
 
-Config.Output.setImageSequence(false);
-Config.Output.setOverwriteOutput(true);
-Config.Rendering.setConcurrency(4);
-/* transparent video
-Config.Rendering.setImageFormat('png');
-Config.Output.setPixelFormat('yuva420p');
-Config.Output.setCodec('vp8');
-*/
-
-Config.Output.setCodec('h264');
-Config.Output.setCrf(1);
-Config.Rendering.setImageFormat('jpeg');
+Config.setOverwriteOutput(true);
+Config.setConcurrency(4);
+Config.setCodec('h264');
+Config.setCrf(1);
+Config.setVideoImageFormat('jpeg');

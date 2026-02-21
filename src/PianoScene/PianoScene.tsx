@@ -1,35 +1,24 @@
-import { FunctionComponent } from 'react';
+import React from 'react';
 import { Piano } from 'react-piano';
 import 'react-piano/dist/styles.css';
 import { useVideoConfig } from 'remotion';
-import styled from 'styled-components';
 import { FIRST_NOTE, LAST_NOTE } from '../constant';
 import { useGetActivesNotes } from './useGetActivesNotes';
 
-export const PianoScene: FunctionComponent = () => {
+export const PianoScene: React.FC = () => {
     const { width } = useVideoConfig();
     const { activeNotesMidiNumber } = useGetActivesNotes();
 
     return (
-        <PianoContainer>
+        <div style={{ position: 'absolute', bottom: 0, backgroundColor: 'black' }}>
             <Piano
                 noteRange={{ first: FIRST_NOTE, last: LAST_NOTE }}
                 activeNotes={activeNotesMidiNumber}
-                playNote={(midiNumber: number) => {
-                    console.log(midiNumber);
-                }}
-                stopNote={(midiNumber: number) => {
-                    console.log(midiNumber);
-                }}
+                playNote={(midiNumber: number) => {}}
+                stopNote={(midiNumber: number) => {}}
                 width={width}
                 keyWidthToHeight={0.2}
             />
-        </PianoContainer>
+        </div>
     );
 };
-
-const PianoContainer = styled.div`
-    position: absolute;
-    bottom: 0;
-    background-color: 'black';
-`;

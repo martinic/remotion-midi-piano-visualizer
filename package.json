@@ -1,52 +1,28 @@
 {
-    "name": "remotion-weather",
-    "version": "1.0.0",
-    "description": "A weather video generator",
+    "name": "remotion-midi-piano-visualizer",
+    "version": "2.0.0",
+    "description": "A MIDI piano visualizer built with Remotion",
     "scripts": {
-        "start": "remotion preview src/index.tsx",
-        "build": "/Applications/VLC.app/Contents/MacOS/VLC -vvv --sout \"#transcode{acodec=mp3,ab=128,channels=2,samplerate=44100}:std{access=file,mux=raw,dst=input.mp3}\" input.mid vlc://quit && node src/api/parseMidiToJson.js && remotion render src/index.tsx PianoComposition out.mp4",
-        "upgrade": "remotion upgrade",
-        "server": "ts-node server.tsx",
-        "test": "eslint src --ext ts,tsx,js,jsx && tsc",
-        "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-        "getData": "node src/api.js"
+        "start": "npx remotion studio",
+        "build": "node src/api/parseMidiToJson.js && npx remotion render src/index.ts PianoComposition out.mp4",
+        "parse-midi": "node src/api/parseMidiToJson.js",
+        "get-info": "node src/api/getInfo.js"
     },
-    "repository": {},
-    "license": "UNLICENSED",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/martinic/remotion-midi-piano-visualizer.git"
+    },
+    "license": "GPL-2.0-or-later",
     "dependencies": {
-        "@remotion/bundler": "^2.0.0",
-        "@remotion/cli": "^2.0.0",
-        "@remotion/eslint-config": "2.0.0",
-        "@remotion/renderer": "^2.0.0",
-        "@tonejs/midi": "^2.0.27",
-        "@types/express": "^4.17.9",
-        "@types/react": "^17.0.0",
-        "@types/react-native": "^0.63.50",
-        "@types/styled-components": "^5.1.7",
-        "dotenv": "^8.2.0",
-        "eslint": "^7.21.0",
-        "express": "^4.17.1",
-        "fs": "^0.0.1-security",
-        "node-fetch": "^2.6.1",
-        "openweather-apis": "^4.4.1",
-        "polished": "^4.1.1",
-        "prettier": "^2.2.1",
-        "prettier-plugin-organize-imports": "^1.1.1",
-        "react": "^17.0.1",
-        "react-dom": "^17.0.2",
-        "react-native": "^0.63.4",
-        "react-native-web": "^0.15.0",
+        "@remotion/cli": "4.0.242",
+        "@tonejs/midi": "^2.0.28",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
         "react-piano": "^3.1.3",
-        "remotion": "^2.0.2",
-        "styled-components": "^5.2.1",
-        "ts-node": "^9.1.1",
-        "typescript": "^4.1.3"
+        "remotion": "4.0.242"
     },
     "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^4.16.1",
-        "@typescript-eslint/parser": "^4.16.1",
-        "commitizen": "^4.2.3",
-        "eslint-config-prettier": "^8.1.0",
-        "eslint-plugin-prettier": "^3.3.1"
+        "@types/react": "^18.3.12",
+        "typescript": "^5.7.0"
     }
 }

@@ -1,6 +1,5 @@
-import { FunctionComponent } from 'react';
+import React from 'react';
 import { useCurrentFrame } from 'remotion';
-import styled from 'styled-components';
 import midi from '../api/midi.json';
 import { BASE_NOTE_HEIGHT } from '../constant';
 import { MidiData } from '../interface';
@@ -12,35 +11,28 @@ interface Props {
     delay: number;
 }
 
-export const NotesScene: FunctionComponent<Props> = ({ delay }) => {
+export const NotesScene: React.FC<Props> = ({ delay }) => {
     const frame = useCurrentFrame();
 
-    const renderChannels = (midiNote: string) => (
-        <NoteChannel
-            key={`noteContainer-${midiNote}`}
-            midiNote={midiNote}
-            activeFrames={midiData.activeFramePerNote[midiNote]}
-            frame={frame}
-            delay={delay}
-        />
-    );
-
     return (
-        <Container>
-            <MovingNoteContainer style={{ '--translateY': `${frame * BASE_NOTE_HEIGHT}%` }}>
-                {Object.keys(midiData.activeFramePerNote).map(renderChannels)}
-            </MovingNoteContainer>
-        </Container>
+        <div style={{ height: '83%', width: '100%' }}>
+            <div
+                style={{
+                    transform: `translateY(${frame * BASE_NOTE_HEIGHT}%)`,
+                    width: '100%',
+                    height: '100%',
+                }}
+            >
+                {Object.keys(midiData.activeFramePerNote).map((midiNote) => (
+                    <NoteChannel
+                        key={`noteContainer-${midiNote}`}
+                        midiNote={midiNote}
+                        activeFrames={midiData.activeFramePerNote[midiNote]}
+                        frame={frame}
+                        delay={delay}
+                    />
+                ))}
+            </div>
+        </div>
     );
 };
-
-const Container = styled.div`
-    height: 83%;
-    width: 100%;
-`;
-
-const MovingNoteContainer = styled.div`
-    transform: translateY(var(--translateY));
-    width: 100%;
-    height: 100%;
-`;

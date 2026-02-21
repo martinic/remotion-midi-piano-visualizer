@@ -1,5 +1,4 @@
-import { FunctionComponent } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import { BASE_NOTE_HEIGHT, BLACK_NOTE_WIDH_IN_PERCENT, WHITE_NOTE_WIDH_IN_PERCENT } from '../constant';
 import { NoteBoundaries } from '../interface';
 import { Note } from './Note';
@@ -12,7 +11,7 @@ interface Props {
     delay: number;
 }
 
-export const NoteChannel: FunctionComponent<Props> = ({ midiNote, frame, activeFrames, delay }) => {
+export const NoteChannel: React.FC<Props> = ({ midiNote, frame, activeFrames, delay }) => {
     const intMidiNote = parseInt(midiNote);
     const isKeyboardNoteBlack = isBlackKeyboardNote(intMidiNote);
 
@@ -22,37 +21,32 @@ export const NoteChannel: FunctionComponent<Props> = ({ midiNote, frame, activeF
 
     const frameWithDelay = frame - delay;
 
-    const renderNote = (note: NoteBoundaries) => {
-        if (frameWithDelay + displayedFrames < note.startFrame) return null;
-        if (note.endFrame < frameWithDelay) return null;
-
-        const durationInFrame = note.endFrame - note.startFrame;
-
-        return (
-            <Note
-                key={`${note.startFrame} -> ${note.endFrame} -${midiNote}`}
-                bottom={`${(note.startFrame + delay) * BASE_NOTE_HEIGHT}%`}
-                height={`${durationInFrame * BASE_NOTE_HEIGHT}%`}
-            />
-        );
-    };
+    const noteWidth = (isKeyboardNoteBlack ? BLACK_NOTE_WIDH_IN_PERCENT : WHITE_NOTE_WIDH_IN_PERCENT) - 0.3;
 
     return (
-        <NoteContainer
-            key={`midiNote-${midiNote}`}
-            $left={`${leftPosition + 0.05}%`}
-            $isKeyboardNoteBlack={isKeyboardNoteBlack}
+        <div
+            style={{
+                position: 'absolute',
+                height: '100%',
+                width: `${noteWidth}%`,
+                top: 0,
+                left: `${leftPosition + 0.05}%`,
+            }}
         >
-            {groupedFrames.map(renderNote)}
-        </NoteContainer>
+            {groupedFrames.map((note: NoteBoundaries) => {
+                if (frameWithDelay + displayedFrames < note.startFrame) return null;
+                if (note.endFrame < frameWithDelay) return null;
+
+                const durationInFrame = note.endFrame - note.startFrame;
+
+                return (
+                    <Note
+                        key={`${note.startFrame} -> ${note.endFrame} -${midiNote}`}
+                        bottom={`${(note.startFrame + delay) * BASE_NOTE_HEIGHT}%`}
+                        height={`${durationInFrame * BASE_NOTE_HEIGHT}%`}
+                    />
+                );
+            })}
+        </div>
     );
 };
-
-const NoteContainer = styled.div<{ $left: string; $isKeyboardNoteBlack: boolean }>`
-    position: absolute;
-    height: 100%;
-    width: ${({ $isKeyboardNoteBlack }) =>
-        ($isKeyboardNoteBlack ? BLACK_NOTE_WIDH_IN_PERCENT : WHITE_NOTE_WIDH_IN_PERCENT) - 0.3}%;
-    top: 0;
-    left: ${({ $left }) => $left};
-`;

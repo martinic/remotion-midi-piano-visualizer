@@ -5,5 +5,6 @@ dist
 out.mp4
 src/api/rawData.json
 secrets.json
-input.mp3
+public/input.mp3
 input.mid
+src/api/midi.json
