@@ -1,36 +1,74 @@
-# Welcome to my Piano Midi Visualizer project!
+# Piano MIDI Visualizer
 
-## Commands
+A MIDI piano visualizer built with [Remotion](https://www.remotion.dev/) v4. Renders falling-note piano videos from any MIDI file, with support for custom audio tracks (e.g. pre-rendered plugin audio instead of MIDI synth).
 
-**Start Preview** (as for every Remotion project)
+## Quick Start
 
-```console
-npm start
+```bash
+npm install
 ```
 
-**Render video**
-To render a video you must :
+1. Place your MIDI file as `input.mid` in the project root
+2. Place your audio file as `public/input.mp3` (or convert: `ffmpeg -i audio.wav -b:a 192k public/input.mp3`)
+3. Parse the MIDI to JSON:
+   ```bash
+   npm run parse-midi
+   ```
+4. Preview in Remotion Studio:
+   ```bash
+   npm start
+   ```
+5. Render the video:
+   ```bash
+   npx remotion render src/index.ts PianoComposition out.mp4
+   ```
 
--   Put a midi file named `input.mid` at project root
--   ` node src/api/getInfo.js` to get the tracks data if you need them
--   Fill `src/api/input.json` file with the song data to be shown in the video intro
--   Modify your package.json `build` command if you are not on macOS to replace VLC install link
--   `yarn run build`
+## Selecting MIDI Tracks
 
-**Output example**
-With this midi file `./example.mid` you will get this video :
-[![Youtube thumbnail](https://img.youtube.com/vi/stO7DYwkjE4/0.jpg)](https://www.youtube.com/watch?v=stO7DYwkjE4)
+By default, all tracks containing notes are visualized. To select specific tracks, use the `TRACKS` environment variable (0-indexed, comma-separated):
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+```bash
+# Show available tracks
+npm run get-info
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+# Render only tracks 2 and 5
+TRACKS=2,5 npm run parse-midi
+```
 
-You should have received a copy of the GNU General Public License along
-with this program; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+On Windows (PowerShell):
+```powershell
+$env:TRACKS="2,5"; npm run parse-midi
+```
+
+## Using Custom Audio
+
+This project decouples MIDI visualization from audio playback. The MIDI file provides note timing data for the visual animation, while the audio comes from a separate MP3 file. This lets you use high-quality audio rendered from DAW plugins (REAPER, Logic, etc.) instead of a basic MIDI synthesizer.
+
+## Configuration
+
+Edit `src/constant.ts` to adjust:
+
+- `FPS` — Frame rate (default: 60)
+- `FIRST_NOTE` / `LAST_NOTE` — Piano range (default: 21-108, full 88 keys)
+- `BASE_NOTE_HEIGHT` — Falling note speed
+- `TITLE_DURATION` — Intro title screen length
+- `DELAY_BEFORE_FIRST_NOTE` — Gap between title and first note
+
+Edit `src/theme.ts` for colors and `src/api/input.json` for title screen text.
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm start` | Open Remotion Studio preview |
+| `npm run parse-midi` | Convert `input.mid` to `src/api/midi.json` |
+| `npm run get-info` | List MIDI tracks and metadata |
+| `npm run build` | Parse MIDI + render video |
+
+## License
+
+GPL-2.0-or-later
+
+## Credits
+
+Originally based on [music-music33/remotion-midi-piano-vizualiser](https://github.com/music-music33/remotion-midi-piano-vizualiser). Upgraded to Remotion v4 with custom audio support by [Martinic](https://www.martinic.com).
