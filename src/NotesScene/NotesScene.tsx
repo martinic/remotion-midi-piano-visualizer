@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCurrentFrame } from 'remotion';
+import { useCurrentFrame, useVideoConfig } from 'remotion';
 import midi from '../api/midi.json';
 import { BASE_NOTE_HEIGHT } from '../constant';
 import { MidiData } from '../interface';
@@ -13,9 +13,11 @@ interface Props {
 
 export const NotesScene: React.FC<Props> = ({ delay }) => {
     const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    const isPortrait = height > width;
 
     return (
-        <div style={{ height: '83%', width: '100%' }}>
+        <div style={{ height: isPortrait ? '88%' : '83%', width: '100%' }}>
             <div
                 style={{
                     transform: `translateY(${frame * BASE_NOTE_HEIGHT}%)`,

@@ -6,11 +6,12 @@ import { useTranslate } from './useTranslate';
 
 export const TitleScene: React.FC = () => {
     const { title, author, midiCreator } = useTitleInfo();
-    const { width, fps } = useVideoConfig();
+    const { width, height, fps } = useVideoConfig();
+    const isPortrait = height > width;
     const marginBottom = width * 0.1;
 
-    const translateX = useTranslate({ from: 400, to: -900, startAtFrame: fps });
-    const translateY = useTranslate({ from: 200, to: -500, startAtFrame: fps });
+    const translateX = useTranslate({ from: isPortrait ? 200 : 400, to: isPortrait ? -500 : -900, startAtFrame: fps });
+    const translateY = useTranslate({ from: isPortrait ? 400 : 200, to: isPortrait ? -800 : -500, startAtFrame: fps });
     const scale = useTranslate({ from: 1, to: 0.5, startAtFrame: fps * 0.95 });
 
     return (
@@ -33,7 +34,7 @@ export const TitleScene: React.FC = () => {
                     style={{
                         fontFamily: THEME.fonts.roboto,
                         color: 'white',
-                        fontSize: 60,
+                        fontSize: isPortrait ? 48 : 60,
                     }}
                 >
                     {title}
@@ -43,7 +44,7 @@ export const TitleScene: React.FC = () => {
                         style={{
                             fontFamily: THEME.fonts.roboto,
                             color: 'white',
-                            fontSize: 44,
+                            fontSize: isPortrait ? 36 : 44,
                         }}
                     >
                         {author}
@@ -54,7 +55,7 @@ export const TitleScene: React.FC = () => {
                         style={{
                             fontFamily: THEME.fonts.roboto,
                             color: 'white',
-                            fontSize: 28,
+                            fontSize: isPortrait ? 22 : 28,
                         }}
                     >
                         {`Midi file by ${midiCreator}`}

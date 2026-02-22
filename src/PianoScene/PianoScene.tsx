@@ -6,7 +6,8 @@ import { FIRST_NOTE, LAST_NOTE } from '../constant';
 import { useGetActivesNotes } from './useGetActivesNotes';
 
 export const PianoScene: React.FC = () => {
-    const { width } = useVideoConfig();
+    const { width, height } = useVideoConfig();
+    const isPortrait = height > width;
     const { activeNotesMidiNumber } = useGetActivesNotes();
 
     return (
@@ -17,7 +18,7 @@ export const PianoScene: React.FC = () => {
                 playNote={(midiNumber: number) => {}}
                 stopNote={(midiNumber: number) => {}}
                 width={width}
-                keyWidthToHeight={0.2}
+                keyWidthToHeight={isPortrait ? 0.4 : 0.2}
             />
         </div>
     );

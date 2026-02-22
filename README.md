@@ -44,6 +44,23 @@ $env:TRACKS="2,5"; npm run parse-midi
 
 This project decouples MIDI visualization from audio playback. The MIDI file provides note timing data for the visual animation, while the audio comes from a separate MP3 file. This lets you use high-quality audio rendered from DAW plugins (REAPER, Logic, etc.) instead of a basic MIDI synthesizer.
 
+## Reel / Portrait Mode (1080×1920)
+
+A second composition `PianoCompositionReel` renders at 1080×1920 for Instagram Reels, YouTube Shorts, and TikTok. All components automatically adapt to portrait orientation:
+
+- **Piano**: Taller keys (`keyWidthToHeight: 0.4`) so they're clearly visible on the narrower canvas
+- **Notes area**: Uses 88% of the height (vs 83% in landscape) to maximize the falling-notes display
+- **Logo**: Centered at the top instead of top-right, slightly larger
+- **Title**: Smaller font sizes to fit the narrower width, adjusted animation path
+
+To render a reel:
+
+```bash
+npx remotion render src/index.ts PianoCompositionReel out-reel.mp4
+```
+
+For memory-constrained systems, use `--concurrency=1` or split into segments (see landscape render notes above).
+
 ## Configuration
 
 Edit `src/constant.ts` to adjust:
