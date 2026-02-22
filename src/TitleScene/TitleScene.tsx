@@ -1,11 +1,15 @@
 import React from 'react';
 import { AbsoluteFill, useVideoConfig } from 'remotion';
 import { THEME } from '../theme';
-import { useTitleInfo } from './useTitleInfo';
 import { useTranslate } from './useTranslate';
 
-export const TitleScene: React.FC = () => {
-    const { title, author, midiCreator } = useTitleInfo();
+interface Props {
+    title?: string;
+    author?: string;
+    midiCreator?: string;
+}
+
+export const TitleScene: React.FC<Props> = ({ title, author, midiCreator }) => {
     const { width, height, fps } = useVideoConfig();
     const isPortrait = height > width;
     const marginBottom = width * 0.1;
@@ -30,15 +34,17 @@ export const TitleScene: React.FC = () => {
                     height: '100%',
                 }}
             >
-                <h1
-                    style={{
-                        fontFamily: THEME.fonts.roboto,
-                        color: 'white',
-                        fontSize: isPortrait ? 48 : 60,
-                    }}
-                >
-                    {title}
-                </h1>
+                {title && (
+                    <h1
+                        style={{
+                            fontFamily: THEME.fonts.roboto,
+                            color: 'white',
+                            fontSize: isPortrait ? 48 : 60,
+                        }}
+                    >
+                        {title}
+                    </h1>
+                )}
                 {author && (
                     <h2
                         style={{

@@ -5,8 +5,12 @@ import { THEME } from './theme';
 import { NotesScene } from './NotesScene/NotesScene';
 import { PianoScene } from './PianoScene/PianoScene';
 import { TitleScene } from './TitleScene/TitleScene';
+import { LogoOverlay } from './LogoOverlay';
+import { VideoProps } from './props';
 
-export const PianoComposition: React.FC = () => {
+export const PianoComposition: React.FC<VideoProps> = ({ title, author, midiCreator, logo, url }) => {
+    const hasTitle = title || author || midiCreator;
+
     return (
         <AbsoluteFill>
             <AbsoluteFill>
@@ -22,9 +26,16 @@ export const PianoComposition: React.FC = () => {
             <Sequence from={0} durationInFrames={Infinity} name="Piano">
                 <PianoScene />
             </Sequence>
-            <Sequence from={0} durationInFrames={Infinity} name="Title">
-                <TitleScene />
-            </Sequence>
+            {hasTitle && (
+                <Sequence from={0} durationInFrames={Infinity} name="Title">
+                    <TitleScene title={title} author={author} midiCreator={midiCreator} />
+                </Sequence>
+            )}
+            {logo && (
+                <Sequence from={0} durationInFrames={Infinity} name="Logo">
+                    <LogoOverlay logo={logo} url={url} />
+                </Sequence>
+            )}
         </AbsoluteFill>
     );
 };

@@ -1,7 +1,12 @@
 import React from 'react';
 import { staticFile, Img, useCurrentFrame, useVideoConfig, interpolate, Easing } from 'remotion';
 
-export const LogoOverlay: React.FC = () => {
+interface Props {
+    logo: string;
+    url?: string;
+}
+
+export const LogoOverlay: React.FC<Props> = ({ logo, url }) => {
     const frame = useCurrentFrame();
     const { fps, width, height } = useVideoConfig();
     const isPortrait = height > width;
@@ -58,24 +63,26 @@ export const LogoOverlay: React.FC = () => {
     return (
         <div style={containerStyle}>
             <Img
-                src={staticFile('AX73Logo.svg')}
+                src={staticFile(logo)}
                 style={{
                     width: isPortrait ? 200 : 160,
                     filter: glowFilter,
                 }}
             />
-            <span
-                style={{
-                    fontFamily: 'Roboto, sans-serif',
-                    color: 'white',
-                    fontSize: isPortrait ? 22 : 18,
-                    marginTop: 8,
-                    letterSpacing: 0.5,
-                    textShadow,
-                }}
-            >
-                martinic.com/ax73
-            </span>
+            {url && (
+                <span
+                    style={{
+                        fontFamily: 'Roboto, sans-serif',
+                        color: 'white',
+                        fontSize: isPortrait ? 22 : 18,
+                        marginTop: 8,
+                        letterSpacing: 0.5,
+                        textShadow,
+                    }}
+                >
+                    {url}
+                </span>
+            )}
         </div>
     );
 };

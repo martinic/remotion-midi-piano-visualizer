@@ -23,6 +23,38 @@ npm install
    npx remotion render src/index.ts PianoComposition out.mp4
    ```
 
+## Props
+
+All metadata is passed via `--props` at render time. Nothing is hardcoded. Create a JSON file (e.g. `props.json`):
+
+```json
+{
+    "title": "Blue Monday",
+    "author": "New Order",
+    "midiCreator": "Raphael Pungin",
+    "logo": "AX73Logo.svg",
+    "url": "martinic.com/ax73"
+}
+```
+
+Then render with:
+
+```bash
+npx remotion render src/index.ts PianoComposition out.mp4 --props=props.json
+```
+
+All props are optional. Omitting `title`/`author`/`midiCreator` hides the title screen. Omitting `logo` hides the logo overlay. Omitting `url` hides the URL text below the logo.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `title` | string | Song title on the title screen |
+| `author` | string | Artist/author name |
+| `midiCreator` | string | MIDI file creator credit |
+| `logo` | string | Logo filename in `public/` (e.g. `"AX73Logo.svg"`) |
+| `url` | string | URL text shown below the logo |
+
+> **Note (Windows):** Passing inline JSON with `--props='{...}'` doesn't work reliably on Windows due to quote escaping. Use a JSON file instead.
+
 ## Selecting MIDI Tracks
 
 By default, all tracks containing notes are visualized. To select specific tracks, use the `TRACKS` environment variable (0-indexed, comma-separated):
@@ -40,38 +72,38 @@ On Windows (PowerShell):
 $env:TRACKS="2,5"; npm run parse-midi
 ```
 
-## Using Custom Audio
+## Reel / Portrait Mode (1080x1920)
 
-This project decouples MIDI visualization from audio playback. The MIDI file provides note timing data for the visual animation, while the audio comes from a separate MP3 file. This lets you use high-quality audio rendered from DAW plugins (REAPER, Logic, etc.) instead of a basic MIDI synthesizer.
+A second composition `PianoCompositionReel` renders at 1080x1920 for Instagram Reels, YouTube Shorts, and TikTok. All components automatically adapt to portrait orientation:
 
-## Reel / Portrait Mode (1080×1920)
-
-A second composition `PianoCompositionReel` renders at 1080×1920 for Instagram Reels, YouTube Shorts, and TikTok. All components automatically adapt to portrait orientation:
-
-- **Piano**: Taller keys (`keyWidthToHeight: 0.4`) so they're clearly visible on the narrower canvas
-- **Notes area**: Uses 88% of the height (vs 83% in landscape) to maximize the falling-notes display
+- **Piano**: Taller keys so they're clearly visible on the narrower canvas
+- **Notes area**: Uses more vertical space to maximize the falling-notes display
 - **Logo**: Centered at the top instead of top-right, slightly larger
 - **Title**: Smaller font sizes to fit the narrower width, adjusted animation path
 
 To render a reel:
 
 ```bash
-npx remotion render src/index.ts PianoCompositionReel out-reel.mp4
+npx remotion render src/index.ts PianoCompositionReel out-reel.mp4 --props=props.json
 ```
 
-For memory-constrained systems, use `--concurrency=1` or split into segments (see landscape render notes above).
+For memory-constrained systems, use `--concurrency=1` or split into segments.
+
+## Using Custom Audio
+
+This project decouples MIDI visualization from audio playback. The MIDI file provides note timing data for the visual animation, while the audio comes from a separate MP3 file. This lets you use high-quality audio rendered from DAW plugins (REAPER, Logic, etc.) instead of a basic MIDI synthesizer.
 
 ## Configuration
 
 Edit `src/constant.ts` to adjust:
 
-- `FPS` — Frame rate (default: 60)
-- `FIRST_NOTE` / `LAST_NOTE` — Piano range (default: 21-108, full 88 keys)
-- `BASE_NOTE_HEIGHT` — Falling note speed
-- `TITLE_DURATION` — Intro title screen length
-- `DELAY_BEFORE_FIRST_NOTE` — Gap between title and first note
+- `FPS` - Frame rate (default: 60)
+- `FIRST_NOTE` / `LAST_NOTE` - Piano range (default: 21-108, full 88 keys)
+- `BASE_NOTE_HEIGHT` - Falling note speed
+- `TITLE_DURATION` - Intro title screen length
+- `DELAY_BEFORE_FIRST_NOTE` - Gap between title and first note
 
-Edit `src/theme.ts` for colors and `src/api/input.json` for title screen text.
+Edit `src/theme.ts` for colors.
 
 ## Scripts
 

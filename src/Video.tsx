@@ -3,6 +3,7 @@ import { Composition } from 'remotion';
 import midiData from './api/midi.json';
 import { FPS } from './constant';
 import { PianoComposition } from './PianoComposition';
+import { defaultProps } from './props';
 
 // Audio duration: 435.691s @ 60fps = 26,141 frames
 const SONG_DURATION = 26141;
@@ -23,6 +24,7 @@ export const RemotionVideo: React.FC = () => {
                 fps={FPS}
                 width={WIDTH}
                 height={HEIGHT}
+                defaultProps={defaultProps}
             />
             <Composition
                 id="PianoCompositionReel"
@@ -31,6 +33,7 @@ export const RemotionVideo: React.FC = () => {
                 fps={FPS}
                 width={REEL_WIDTH}
                 height={REEL_HEIGHT}
+                defaultProps={defaultProps}
             />
         </>
     );
